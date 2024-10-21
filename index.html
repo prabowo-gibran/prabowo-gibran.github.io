@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Progres Pemerintahan Prabowo - Gibran</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/currency.js/2.0.4/currency.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+    }
+    #progress-container {
+      width: 100%;
+      background-color: #f3f3f3;
+      border-radius: 25px;
+      overflow: hidden;
+      margin: 20px 0;
+      height: 30px;
+    }
+    #progress-bar {
+      height: 100%;
+      background-color: #4caf50;
+      width: 0;
+      text-align: center;
+      line-height: 30px;
+      color: white;
+      transition: width 0.5s ease;
+    }
+    h1 {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Progres Pemerintahan Prabowo - Gibran</h1>
+  
+  <div id="progress-container">
+    <div id="progress-bar"></div>
+  </div>
+  
+  <p id="progress-text"></p>
+  
+  <button id="tweet-button">Tweet Progressnya</button>
+
+  <script>
+    function calculateProgress() {
+      const start = new Date('2024-10-20'); // Start date: October 20, 2024
+      const end = new Date('2029-10-20'); // End date: October 20, 2029
+      const now = new Date(); // Current date
+      
+      const totalTime = end - start; // Total time span in milliseconds
+      const timePassed = now - start; // Time passed since the start date in milliseconds
+      
+      const progress = (timePassed / totalTime) * 100; // Percentage of time passed
+      
+      // Ensure the progress is a valid percentage between 0 and 100
+      return Math.max(0, Math.min(100, progress));
+    }
+
+    function updateProgressBar() {
+      const progress = calculateProgress();
+
+      // Create the visual Unicode progress bar (0 to 10 blocks)
+      const totalBlocks = 23;
+      const filledBlocks = Math.round((progress / 100) * totalBlocks);
+      const emptyBlocks = totalBlocks - filledBlocks;
+      const progressBarUnicode = '█'.repeat(filledBlocks) + '░'.repeat(emptyBlocks);
+
+      // Update progress bar visual and text
+      $('#progress-bar').css('width', progress + '%').text(progress.toFixed(6) + '%');
+      $('#progress-text').text(`adalah ${progress.toFixed(6)}% selesai.`);
+
+      $('#tweet-button').on('click', tweetProgress);
+      return progressBarUnicode;
+    }
+
+    function tweetProgress() {
+      const progressText = updateProgressBar();
+      const progressPercentage = calculateProgress().toFixed(6);
+      const tweetText = `Progres ===> ${progressPercentage}% selesai.\n${progressText}`;
+
+      const tweetUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
+      window.open(tweetUrl, '_blank');
+    }
+
+    $(document).ready(function() {
+      updateProgressBar();
+      setInterval(updateProgressBar, 100); // Update setiap 100ms
+    });
+  </script>
+
+</body>
+</html>
+
